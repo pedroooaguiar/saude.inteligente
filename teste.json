@@ -1,0 +1,101 @@
+{
+    "info": {
+        "name": "SaudeInteligente API",
+        "description": "API para gerenciar consultas médicas",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Get Consultas",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "http://localhost:8080/consultas",
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "8080",
+                    "path": [
+                        "consultas"
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Post Consultas",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n\t\"idPaciente\": 1, \n\t\"idMedico\": 2, \n\t\"dataHora\": \"2024-05-28T10:00:00\"\n}"
+                },
+                "url": {
+                    "raw": "http://localhost:8080/consultas",
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "8080",
+                    "path": [
+                        "consultas"
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Put Consultas",
+            "request": {
+                "method": "PUT",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n\t\"idPaciente\": 1, \n\t\"idMedico\": 2, \n\t\"dataHora\": \"2024-05-28T11:00:00\"\n}"
+                },
+                "url": {
+                    "raw": "http://localhost:8080/consultas/1",
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "8080",
+                    "path": [
+                        "consultas",
+                        "1"
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Delete Consultas",
+            "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                    "raw": "http://localhost:8080/consultas/1",
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "8080",
+                    "path": [
+                        "consultas",
+                        "1"
+                    ]
+                }
+            }
+        }
+    ]
+}
