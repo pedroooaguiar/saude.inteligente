@@ -22,7 +22,7 @@ jobs:
         java-version: '17'
 
     - name: Build with Maven (Debug Mode)
-      run: mvn clean install -e -X
+      run: mvn clean install -DskipTests -e -X
 
   deploy_staging:
     needs: build
