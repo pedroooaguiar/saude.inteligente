@@ -11,11 +11,10 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
-
+    
     - name: Set up JDK 17
       uses: actions/setup-java@v1
       with:
@@ -28,13 +27,12 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
-
     steps:
     - name: Install Docker
       run: |
         sudo apt-get update
         sudo apt-get install docker-ce docker-ce-cli containerd.io
-
+    
     - name: Install Docker Compose
       run: |
         sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
@@ -49,13 +47,12 @@ jobs:
     needs: deploy_staging
     runs-on: ubuntu-latest
     if: github.ref == 'refs/tags/v*'
-
     steps:
     - name: Install Docker
       run: |
         sudo apt-get update
         sudo apt-get install docker-ce docker-ce-cli containerd.io
-
+    
     - name: Install Docker Compose
       run: |
         sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
@@ -66,11 +63,3 @@ jobs:
         echo "Deploying to production..."
         docker-compose -f docker-compose.yml up -d
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Echo test message
-      run: echo "Testando alterações no pipeline"
-    - name: Checkout code
-      uses: actions/checkout@v2
