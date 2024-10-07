@@ -41,7 +41,7 @@ jobs:
       - name: Deploy to Staging
         run: |
           echo "Deploying to staging..."
-          docker-compose -f ./docker-compose.yml up -d
+          docker-compose -f /home/runner/work/saude.inteligente/saude.inteligente/docker-compose.yml up -d
 
   deploy_production:
     needs: deploy_staging
@@ -61,5 +61,5 @@ jobs:
       - name: Deploy to Production
         run: |
           echo "Deploying to production..."
-          docker-compose -f ./docker-compose.yml up -d
+          docker-compose -f /home/runner/work/saude.inteligente/saude.inteligente/docker-compose.yml up -d
 
