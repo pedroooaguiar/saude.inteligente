@@ -1,6 +1,5 @@
 package com.example.saudeinteligente.config;
 
-import com.example.saudeinteligente.service.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -11,6 +10,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import com.example.saudeinteligente.service.CustomUserDetailsService;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -18,13 +19,13 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable())
-                .authorizeRequests(auth -> auth
-                        .requestMatchers("/public/**").permitAll()
-                        .anyRequest().authenticated()
+                .csrf(csrf -> csrf.disable())  // Desabilitando CSRF para fins de desenvolvimento
+                .authorizeHttpRequests(auth -> auth  // Atualizado para authorizeHttpRequests
+                        .requestMatchers("/public/**").permitAll()  // Permite todas as requisições para /public/**
+                        .anyRequest().authenticated()  // Qualquer outra requisição deve ser autenticada
                 )
-                .formLogin(form -> form.permitAll())
-                .logout(logout -> logout.permitAll());
+                .formLogin(form -> form.permitAll())  // Permite o login via formulário
+                .logout(logout -> logout.permitAll());  // Permite o logout de qualquer usuário
 
         return http.build();
     }
@@ -46,5 +47,4 @@ public class SecurityConfig {
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
     }
-
 }
