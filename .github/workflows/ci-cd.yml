@@ -12,54 +12,54 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-    
-    - name: Set up JDK 17
-      uses: actions/setup-java@v1
-      with:
-        java-version: '17'
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Build with Maven (Debug Mode)
-      run: mvn clean install -DskipTests -e -X
+      - name: Set up JDK 17
+        uses: actions/setup-java@v1
+        with:
+          java-version: '17'
+
+      - name: Build with Maven (Debug Mode)
+        run: mvn clean install -DskipTests -e -X
 
   deploy_staging:
     needs: build
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
     steps:
-    - name: Install Docker
-      run: |
-        sudo apt-get update
-        sudo apt-get install docker-ce docker-ce-cli containerd.io
-    
-    - name: Install Docker Compose
-      run: |
-        sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-        sudo chmod +x /usr/local/bin/docker-compose
+      - name: Install Docker
+        run: |
+          sudo apt-get update
+          sudo apt-get install docker-ce docker-ce-cli containerd.io
 
-    - name: Deploy to Staging
-      run: |
-        echo "Deploying to staging..."
-        docker-compose -f docker-compose.yml up -d
+      - name: Install Docker Compose
+        run: |
+          sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+          sudo chmod +x /usr/local/bin/docker-compose
+
+      - name: Deploy to Staging
+        run: |
+          echo "Deploying to staging..."
+          docker-compose -f ./docker-compose.yml up -d
 
   deploy_production:
     needs: deploy_staging
     runs-on: ubuntu-latest
     if: github.ref == 'refs/tags/v*'
     steps:
-    - name: Install Docker
-      run: |
-        sudo apt-get update
-        sudo apt-get install docker-ce docker-ce-cli containerd.io
-    
-    - name: Install Docker Compose
-      run: |
-        sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-        sudo chmod +x /usr/local/bin/docker-compose
+      - name: Install Docker
+        run: |
+          sudo apt-get update
+          sudo apt-get install docker-ce docker-ce-cli containerd.io
 
-    - name: Deploy to Production
-      run: |
-        echo "Deploying to production..."
-        docker-compose -f docker-compose.yml up -d
+      - name: Install Docker Compose
+        run: |
+          sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+          sudo chmod +x /usr/local/bin/docker-compose
+
+      - name: Deploy to Production
+        run: |
+          echo "Deploying to production..."
+          docker-compose -f ./docker-compose.yml up -d
 
