@@ -21,7 +21,10 @@ jobs:
           java-version: '17'
 
       - name: Build with Maven (Debug Mode)
-        run: mvn clean install -DskipTests -e -X
+        run: |
+          echo "Iniciando processo de build para testar..."
+          mvn clean install -DskipTests -e -X
+          echo "Build finalizado com sucesso!"
 
   deploy_staging:
     needs: build
@@ -41,8 +44,8 @@ jobs:
       - name: Deploy to Staging
         run: |
           echo "Deploying to staging..."
-          docker-compose -f docker-compose.yml up -d
- 
+          docker-compose -f ./docker-compose.yml up -d
+
   deploy_production:
     needs: deploy_staging
     runs-on: ubuntu-latest
@@ -61,5 +64,5 @@ jobs:
       - name: Deploy to Production
         run: |
           echo "Deploying to production..."
-          docker-compose -f /home/runner/work/saude.inteligente/saude.inteligente/docker-compose.yml up -d
+          docker-compose -f ./docker-compose.yml up -d
 
