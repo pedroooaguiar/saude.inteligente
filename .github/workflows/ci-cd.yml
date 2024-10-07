@@ -66,3 +66,11 @@ jobs:
         echo "Deploying to production..."
         docker-compose -f docker-compose.yml up -d
 
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Echo test message
+      run: echo "Testando alterações no pipeline"
+    - name: Checkout code
+      uses: actions/checkout@v2
