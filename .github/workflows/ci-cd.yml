@@ -51,7 +51,7 @@ jobs:
       - name: Deploy to Staging
         run: |
           echo "Deploying to staging..."
-          docker-compose -f ./docker-compose.yml up -d
+          docker-compose -f docker-compose.yml up -d
 
   deploy_production:
     needs: deploy_staging
