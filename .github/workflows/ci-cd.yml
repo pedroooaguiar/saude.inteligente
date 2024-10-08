@@ -60,7 +60,7 @@ jobs:
           docker-compose -f ./docker-compose.yml up -d
 
   deploy_production:
-    needs: build
+    needs: deploy_staging
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/v')
     steps:
@@ -88,4 +88,9 @@ jobs:
       - name: Deploy to Production
         run: |
           echo "Deploying to production..."
-          docker-compose -f ./docker-compose.yml up -d
+          docker-compose -f ./docker-compose.prod.yml up -d  # Use um arquivo específico para produção
+
+      - name: Verificar Containers
+        run: |
+          echo "Verificando containers em execução..."
+          docker ps  # Lista os containers em execução
