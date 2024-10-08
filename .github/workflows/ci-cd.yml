@@ -31,6 +31,9 @@ jobs:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
       - name: Install Docker
         run: |
           sudo apt-get update
@@ -51,13 +54,16 @@ jobs:
       - name: Deploy to Staging
         run: |
           echo "Deploying to staging..."
-          docker-compose -f docker-compose.yml up -d
+          docker-compose -f ./docker-compose.yml up -d
 
   deploy_production:
     needs: deploy_staging
     runs-on: ubuntu-latest
     if: github.ref == 'refs/tags/v*'
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
       - name: Install Docker
         run: |
           sudo apt-get update
@@ -79,3 +85,4 @@ jobs:
         run: |
           echo "Deploying to production..."
           docker-compose -f ./docker-compose.yml up -d
+
