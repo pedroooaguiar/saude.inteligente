@@ -2,7 +2,7 @@ version: '3'
 
 services:
   app:
-    image: nome-da-imagem:staging   
+    image: nome-da-imagem:staging  # Substitua pela imagem correta de staging
     container_name: saudeinteligente_app_staging
     ports:
       - "8080:8080"
