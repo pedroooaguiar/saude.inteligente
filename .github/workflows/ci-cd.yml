@@ -3,10 +3,9 @@ name: CI/CD Pipeline
 on:
   push:
     branches:
-      - main
-  pull_request:
-    branches:
-      - main
+      - main   
+    tags:
+      - 'v*.*.*'   
 
 jobs:
   build:
@@ -23,7 +22,7 @@ jobs:
       - name: Build with Maven (Debug Mode)
         run: |
           echo "Iniciando processo de build para testar..."
-          mvn clean install -DskipTests -e -X
+          mvn clean install -DskipTests=false -e -X  # Executa testes
           echo "Build finalizado com sucesso!"
 
   deploy_staging:
@@ -44,7 +43,7 @@ jobs:
           sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
           sudo chmod +x /usr/local/bin/docker-compose
 
-      # Construa a imagem localmente em vez de puxá-la
+       
       - name: Build Docker Image
         run: |
           docker build -t saudeinteligente_app_staging .
@@ -62,9 +61,9 @@ jobs:
           docker-compose -f ./docker-compose.yml up -d --build
 
   deploy_production:
-    needs: deploy_staging
+    needs: build
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/tags/v*'
+    if: startsWith(github.ref, 'refs/tags/v')
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -79,6 +78,7 @@ jobs:
           sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
           sudo chmod +x /usr/local/bin/docker-compose
 
+       
       - name: Build Docker Image
         run: |
           docker build -t saudeinteligente_app_prod .

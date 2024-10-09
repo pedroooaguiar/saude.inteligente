@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+  app:
+    build: .  # Construa localmente o Dockerfile em vez de baixar do Docker Hub
+    container_name: saudeinteligente_app_prod
+    ports:
+      - "80:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - DATABASE_URL=jdbc:postgresql://db:5432/saudeinteligente_prod
+      - DATABASE_USER=usuario_prod
+      - DATABASE_PASSWORD=senha_prod
+    networks:
+      - saudeinteligente_prod_network
+
+  db:
+    image: postgres:latest
+    container_name: saudeinteligente_db_prod
+    environment:
+      - POSTGRES_DB=saudeinteligente_prod
+      - POSTGRES_USER=usuario_prod
+      - POSTGRES_PASSWORD=senha_prod
+    volumes:
+      - saudeinteligente_db_prod_data:/var/lib/postgresql/data
+    networks:
+      - saudeinteligente_prod_network
+
+networks:
+  saudeinteligente_prod_network:
+
+volumes:
+  saudeinteligente_db_prod_data:
