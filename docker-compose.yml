@@ -2,7 +2,7 @@ version: '3'
 
 services:
   app:
-    image: meu-usuario/minha-aplicacao:staging  # Substitua pelo nome correto da imagem
+    image: nome-da-imagem:latest
     container_name: saudeinteligente_app_staging
     ports:
       - "8080:8080"
@@ -19,7 +19,7 @@ services:
       - POSTGRES_USER=usuario
       - POSTGRES_PASSWORD=senha
     volumes:
-      - saudeinteligente_db_staging_data:/var/lib/postgresql/data
+      - saudeinteligente_db_data:/var/lib/postgresql/data
     networks:
       - saudeinteligente_staging_network
 
@@ -27,4 +27,4 @@ networks:
   saudeinteligente_staging_network:
 
 volumes:
-  saudeinteligente_db_staging_data:
+  saudeinteligente_db_data:
