@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  app:
+    image: nome-da-imagem:prod
+    ports:
+      - "80:80"
+    environment:
+      - NODE_ENV=production
+    volumes:
+      - ./app:/usr/src/app
+    networks:
+      - prod-network
+
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: exemploSenha
+      MYSQL_DATABASE: exemploDB
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    volumes:
+      - db-data:/var/lib/mysql
+    networks:
+      - prod-network
+
+networks:
+  prod-network:
+
+volumes:
+  db-data:
+ 
