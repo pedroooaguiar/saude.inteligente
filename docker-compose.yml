@@ -2,7 +2,9 @@ version: '3'
 
 services:
   app:
-    image: seu-usuario/nome-da-imagem:latest  # Substitua pelo nome correto da imagem no Docker Hub para staging
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: saudeinteligente_app_staging
     ports:
       - "8080:8080"
@@ -11,20 +13,3 @@ services:
     networks:
       - saudeinteligente_staging_network
 
-  db:
-    image: postgres:latest
-    container_name: saudeinteligente_db_staging
-    environment:
-      - POSTGRES_DB=saudeinteligente
-      - POSTGRES_USER=usuario
-      - POSTGRES_PASSWORD=senha
-    volumes:
-      - saudeinteligente_db_data:/var/lib/postgresql/data
-    networks:
-      - saudeinteligente_staging_network
-
-networks:
-  saudeinteligente_staging_network:
-
-volumes:
-  saudeinteligente_db_data:
