@@ -19,11 +19,10 @@ public class FlywayConfig {
 
     @Bean
     public Flyway flyway() {
-        Flyway flyway = Flyway.configure()
+        return Flyway.configure()
                 .dataSource(dbUrl, dbUser, dbPassword)
                 .locations("classpath:db/migration")
+                .baselineOnMigrate(true)   
                 .load();
-        flyway.migrate();
-        return flyway;
     }
 }
