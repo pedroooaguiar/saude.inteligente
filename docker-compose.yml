@@ -2,7 +2,7 @@ version: '3'
 
 services:
   app:
-    image: nome-da-imagem:latest
+    image: seu-usuario/nome-da-imagem:latest  # Substitua pelo nome correto da imagem no Docker Hub para staging
     container_name: saudeinteligente_app_staging
     ports:
       - "8080:8080"

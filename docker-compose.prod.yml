@@ -2,7 +2,7 @@ version: '3'
 
 services:
   app:
-    image: nome-da-imagem:prod  # Substitua pela imagem correta de produção
+    image: seu-usuario/nome-da-imagem:prod  # Substitua pelo nome correto da imagem no Docker Hub para produção
     container_name: saudeinteligente_app_prod
     ports:
       - "80:8080"
