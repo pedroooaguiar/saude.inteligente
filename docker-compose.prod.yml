@@ -1,32 +1,30 @@
-version: '3.8'
+version: '3'
 
 services:
   app:
-    image: nome-da-imagem:prod
+    image: seu-usuario/nome-da-imagem:prod  # Substitua pelo nome correto da imagem no Docker Hub
+    container_name: saudeinteligente_app_prod
     ports:
-      - "80:80"
+      - "80:8080"
     environment:
-      - NODE_ENV=production
-    volumes:
-      - ./app:/usr/src/app
+      - SPRING_PROFILES_ACTIVE=prod
     networks:
-      - prod-network
+      - saudeinteligente_prod_network
 
   db:
-    image: mysql:5.7
+    image: postgres:latest
+    container_name: saudeinteligente_db_prod
     environment:
-      MYSQL_ROOT_PASSWORD: exemploSenha
-      MYSQL_DATABASE: exemploDB
-      MYSQL_USER: user
-      MYSQL_PASSWORD: password
+      - POSTGRES_DB=saudeinteligente
+      - POSTGRES_USER=usuario
+      - POSTGRES_PASSWORD=senha
     volumes:
-      - db-data:/var/lib/mysql
+      - saudeinteligente_db-data:/var/lib/postgresql/data
     networks:
-      - prod-network
+      - saudeinteligente_prod_network
 
 networks:
-  prod-network:
+  saudeinteligente_prod_network:
 
 volumes:
-  db-data:
- 
+  saudeinteligente_db-data:
