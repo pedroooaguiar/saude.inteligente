@@ -1,92 +1,30 @@
-name: CI/CD Pipeline
+version: '3'
 
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+services:
+  app:
+    image: nome-da-imagem:latest
+    container_name: saudeinteligente_app_local
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=local
+    networks:
+      - saudeinteligente_local_network
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+  db:
+    image: postgres:latest
+    container_name: saudeinteligente_db_local
+    environment:
+      - POSTGRES_DB=saudeinteligente
+      - POSTGRES_USER=usuario
+      - POSTGRES_PASSWORD=senha
+    volumes:
+      - saudeinteligente_db_data:/var/lib/postgresql/data
+    networks:
+      - saudeinteligente_local_network
 
-      - name: Set up JDK 17
-        uses: actions/setup-java@v1
-        with:
-          java-version: '17'
+networks:
+  saudeinteligente_local_network:
 
-      - name: Build with Maven (Debug Mode)
-        run: |
-          echo "Iniciando processo de build para testar..."
-          mvn clean install -DskipTests -e -X
-          echo "Build finalizado com sucesso!"
-
-  deploy_staging:
-    needs: build
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Install Docker
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y docker-ce docker-ce-cli containerd.io
-
-      - name: Install Docker Compose
-        run: |
-          sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-          sudo chmod +x /usr/local/bin/docker-compose
-
-      - name: Verificar arquivos
-        run: |
-          echo "Diretório atual:"
-          pwd
-          echo "Arquivos disponíveis:"
-          ls -la
-
-      - name: Deploy to Staging
-        run: |
-          echo "Deploying to staging..."
-          docker-compose -f ./docker-compose.staging.yml up -d
-
-  deploy_production:
-    needs: deploy_staging
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/tags/v*'
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Install Docker
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y docker-ce docker-ce-cli containerd.io
-
-      - name: Install Docker Compose
-        run: |
-          sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-          sudo chmod +x /usr/local/bin/docker-compose
-
-      - name: Verificar arquivos
-        run: |
-          echo "Diretório atual:"
-          pwd
-          echo "Arquivos disponíveis:"
-          ls -la
-
-      - name: Deploy to Production
-        run: |
-          echo "Deploying to production..."
-          docker-compose -f ./docker-compose.prod.yml up -d
-
-      - name: Verificar Containers
-        run: |
-          echo "Verificando containers em execução..."
-          docker ps  # Lista os containers em execução
+volumes:
+  saudeinteligente_db_data:
