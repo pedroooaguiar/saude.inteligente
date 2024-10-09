@@ -2,7 +2,7 @@ version: '3'
 
 services:
   app:
-    image: seu-usuario/nome-da-imagem:prod  # Substitua pelo nome correto da imagem no Docker Hub
+    image: nome-da-imagem:prod  # Substitua pela imagem correta de produção
     container_name: saudeinteligente_app_prod
     ports:
       - "80:8080"
@@ -19,7 +19,7 @@ services:
       - POSTGRES_USER=usuario
       - POSTGRES_PASSWORD=senha
     volumes:
-      - saudeinteligente_db-data:/var/lib/postgresql/data
+      - saudeinteligente_db_prod_data:/var/lib/postgresql/data
     networks:
       - saudeinteligente_prod_network
 
@@ -27,4 +27,4 @@ networks:
   saudeinteligente_prod_network:
 
 volumes:
-  saudeinteligente_db-data:
+  saudeinteligente_db_prod_data:

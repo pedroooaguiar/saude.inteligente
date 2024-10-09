@@ -2,29 +2,29 @@ version: '3'
 
 services:
   app:
-    image: nome-da-imagem:latest
-    container_name: saudeinteligente_app_local
+    image: meu-usuario/minha-aplicacao:staging  # Substitua pelo nome correto da imagem
+    container_name: saudeinteligente_app_staging
     ports:
       - "8080:8080"
     environment:
-      - SPRING_PROFILES_ACTIVE=local
+      - SPRING_PROFILES_ACTIVE=staging
     networks:
-      - saudeinteligente_local_network
+      - saudeinteligente_staging_network
 
   db:
     image: postgres:latest
-    container_name: saudeinteligente_db_local
+    container_name: saudeinteligente_db_staging
     environment:
       - POSTGRES_DB=saudeinteligente
       - POSTGRES_USER=usuario
       - POSTGRES_PASSWORD=senha
     volumes:
-      - saudeinteligente_db_data:/var/lib/postgresql/data
+      - saudeinteligente_db_staging_data:/var/lib/postgresql/data
     networks:
-      - saudeinteligente_local_network
+      - saudeinteligente_staging_network
 
 networks:
-  saudeinteligente_local_network:
+  saudeinteligente_staging_network:
 
 volumes:
-  saudeinteligente_db_data:
+  saudeinteligente_db_staging_data:
