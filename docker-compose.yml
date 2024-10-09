@@ -2,14 +2,31 @@ version: '3'
 
 services:
   app:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: seu-usuario/nome-da-imagem:latest  # Substitua pelo nome correto da imagem no Docker Hub para staging
     container_name: saudeinteligente_app_staging
     ports:
       - "8080:8080"
     environment:
       - SPRING_PROFILES_ACTIVE=staging
     networks:
-      - saudeinteligente_staging_network
+      - saudeinteligente_staging_network  # Rede que será definida abaixo
 
+  db:
+    image: postgres:latest
+    container_name: saudeinteligente_db_staging
+    environment:
+      - POSTGRES_DB=saudeinteligente
+      - POSTGRES_USER=usuario
+      - POSTGRES_PASSWORD=senha
+    volumes:
+      - saudeinteligente_db_data:/var/lib/postgresql/data
+    networks:
+      - saudeinteligente_staging_network  # Rede compartilhada com o app
+
+# Aqui a rede é definida
+networks:
+  saudeinteligente_staging_network:  # Definição da rede para staging
+
+# Definição do volume para o banco de dados
+volumes:
+  saudeinteligente_db_data:
