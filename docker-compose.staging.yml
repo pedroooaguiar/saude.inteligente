@@ -19,7 +19,7 @@ services:
       - POSTGRES_USER=usuario
       - POSTGRES_PASSWORD=senha
     volumes:
-      - saudeinteligente_db-staging-data:/var/lib/postgresql/data
+      - saudeinteligente_db_staging_data:/var/lib/postgresql/data
     networks:
       - saudeinteligente_staging_network
 
@@ -27,4 +27,4 @@ networks:
   saudeinteligente_staging_network:
 
 volumes:
-  saudeinteligente_db-staging-data:
+  saudeinteligente_db_staging_data:
