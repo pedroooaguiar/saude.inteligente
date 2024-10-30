@@ -4,8 +4,10 @@ import org.flywaydb.core.Flyway;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
 @Configuration
+@Profile("!test") // Esta classe será carregada apenas se o perfil ativo NÃO for "test"
 public class FlywayConfig {
 
     @Value("${spring.datasource.url}")
@@ -22,7 +24,7 @@ public class FlywayConfig {
         return Flyway.configure()
                 .dataSource(dbUrl, dbUser, dbPassword)
                 .locations("classpath:db/migration")
-                .baselineOnMigrate(true)   
+                .baselineOnMigrate(true)
                 .load();
     }
 }

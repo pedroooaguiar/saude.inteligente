@@ -1,2 +1,4 @@
-package com.example.saudeinteligente.config;public interface CommandLineRunner {
+package com.example.saudeinteligente.config;
+
+public interface CommandLineRunner {
 }

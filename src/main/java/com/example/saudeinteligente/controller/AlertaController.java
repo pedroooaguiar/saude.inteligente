@@ -1,38 +1,42 @@
 package com.example.saudeinteligente.controller;
 
-import com.example.saudeinteligente.model.Alerta;
-import com.example.saudeinteligente.service.AlertaService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
+import org.junit.jupiter.api.Test;
+import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.notNullValue;
 
-import java.util.List;
-
-@RestController
-@RequestMapping("/api/alertas")
 public class AlertaController {
 
-    @Autowired
-    private AlertaService alertaService;
+    @Test
+    public void testCreateAlertaSuccess() {
+        String alertaJson = "{ \"mensagem\": \"Teste de alerta\" }";
 
-    @GetMapping
-    public List<Alerta> getAllAlertas() {
-        return alertaService.getAllAlertas();
+        RestAssured.given()
+                .contentType(ContentType.JSON)
+                .body(alertaJson)
+                .when()
+                .post("/api/alertas")
+                .then()
+                .statusCode(201)
+                .body("id", notNullValue())
+                .body("mensagem", equalTo("Teste de alerta"))
+                .assertThat()
+                .body(matchesJsonSchemaInClasspath("schemas/alerta-schema.json"));
     }
 
-    @PostMapping
-    public Alerta createAlerta(@RequestBody Alerta alerta) {
-        return alertaService.createAlerta(alerta);
-    }
+    @Test
+    public void testCreateAlertaMissingFields() {
+        String alertaJson = "{ }";
 
-    @PutMapping("/{id}")
-    public Alerta updateAlerta(@PathVariable Long id, @RequestBody Alerta alerta) {
-        return alertaService.updateAlerta(id, alerta);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteAlerta(@PathVariable Long id) {
-        alertaService.deleteAlerta(id);
-        return ResponseEntity.noContent().build();
+        RestAssured.given()
+                .contentType(ContentType.JSON)
+                .body(alertaJson)
+                .when()
+                .post("/api/alertas")
+                .then()
+                .statusCode(400)
+                .body("error", notNullValue());
     }
 }

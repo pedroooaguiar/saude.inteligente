@@ -1,45 +1,36 @@
 package com.example.saudeinteligente.controller;
 
-import com.example.saudeinteligente.model.Paciente;
-import com.example.saudeinteligente.service.PacienteService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import io.restassured.RestAssured;
+import org.testng.annotations.Test;
+import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
+import static org.hamcrest.Matchers.*;
 
-import java.util.List;
-
-@RestController
-@RequestMapping("/pacientes")
 public class PacienteController {
 
-    @Autowired
-    private PacienteService pacienteService;
-
-    @GetMapping
-    public List<Paciente> getAllPacientes() {
-        return pacienteService.getAllPacientes();
+    @Test
+    public void testGetPacienteNotFound() {
+        RestAssured.given()
+                .when()
+                .get("/pacientes/999")
+                .then()
+                .statusCode(404)
+                .body(emptyOrNullString());
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Paciente> getPacienteById(@PathVariable Long id) {
-        Paciente paciente = pacienteService.getPacienteById(id);
-        return paciente != null ? ResponseEntity.ok(paciente) : ResponseEntity.notFound().build();
-    }
+    @Test
+    public void testCreatePacienteSuccess() {
+        String pacienteJson = "{ \"nome\": \"João Silva\", \"email\": \"joao@example.com\", \"telefone\": \"123456789\", \"dataNascimento\": \"1980-01-01\" }";
 
-    @PostMapping
-    public Paciente createPaciente(@RequestBody Paciente paciente) {
-        return pacienteService.createPaciente(paciente);
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<Paciente> updatePaciente(@PathVariable Long id, @RequestBody Paciente pacienteDetails) {
-        Paciente updatedPaciente = pacienteService.updatePaciente(id, pacienteDetails);
-        return updatedPaciente != null ? ResponseEntity.ok(updatedPaciente) : ResponseEntity.notFound().build();
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePaciente(@PathVariable Long id) {
-        pacienteService.deletePaciente(id);
-        return ResponseEntity.noContent().build();
+        RestAssured.given()
+                .contentType("application/json")
+                .body(pacienteJson)
+                .when()
+                .post("/pacientes")
+                .then()
+                .statusCode(200)
+                .body("id", notNullValue())
+                .body("nome", equalTo("João Silva"))
+                .assertThat()
+                .body(matchesJsonSchemaInClasspath("schemas/paciente-schema.json"));
     }
 }
